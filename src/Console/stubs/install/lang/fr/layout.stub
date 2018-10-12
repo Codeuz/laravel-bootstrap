@@ -1,0 +1,16 @@
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Layout Language Lines
+    |--------------------------------------------------------------------------
+    |
+    | The following language lines are used into the main layout.
+    |
+    */
+
+    'home' => 'Accueil',
+    'welcome' => 'Bienvenue !'
+];

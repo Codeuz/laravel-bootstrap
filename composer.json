@@ -1,0 +1,28 @@
+{
+    "name": "cdz/laravel-bootstrap",
+    "description": "Laravel Package to install the Bootstrap library (v3.3.7) and create a welcome page template.",
+    "authors": [
+        {
+            "name": "apalette",
+            "email": "aurelie@codeuz.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "Cdz\\Bootstrap\\": "src/"
+        }
+    },
+    "extra": {
+	    "laravel": {
+	        "providers": [
+	            "Cdz\\Bootstrap\\BootstrapServiceProvider"
+	        ]
+	    }
+	}
+}

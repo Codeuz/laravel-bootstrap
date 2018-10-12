@@ -1,0 +1,7 @@
+@extends('layouts.app')
+
+@section('title', __('layout.home'))
+
+@section('content')
+<h1>{{__('layout.welcome')}}</h1>
+@endsection
