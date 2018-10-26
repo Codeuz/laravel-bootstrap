@@ -15,6 +15,7 @@ class BootstrapInstall extends Command {
 	 * @var string
 	 */
 	protected $signature = 'cdz-bootstrap:install
+						{--assets : Only scaffold the assets}
 						{--views : Only scaffold the views}
 						{--force : Overwrite existing views by default}';
 
@@ -24,6 +25,18 @@ class BootstrapInstall extends Command {
 	 * @var string
 	 */
 	protected $description = 'Command to install the Bootstrap library (v3.3.7) and create a welcome page template.';
+	
+	/**
+     * The assets that need to be exported.
+     *
+     * @var array
+     */
+    protected $assets = [
+        'favicon.ico',
+        'apple-touch-icon.png',
+        'assets/app',
+        'assets/libs'
+    ];
 	
 	/**
      * The views that need to be exported.
@@ -48,33 +61,24 @@ class BootstrapInstall extends Command {
         'fr/passwords.stub' => 'fr/passwords.php',
         'fr/validation.stub' => 'fr/validation.php',
     ];
-	
-	/**
-     * The assets that need to be exported.
-     *
-     * @var array
-     */
-    protected $assets = [
-        'favicon.ico',
-        'apple-touch-icon.png',
-        'assets/app',
-        'assets/libs'
-    ];
 
 	/**
      * Execute the command.
      */
     public function handle()
 	{
-		$this->createDirectories();
-		
-		$this->exportViews();
-		
-		$this->exportTranslations();
-		
+		$this->createAssetsDirectories();
 		$this->exportAssets();
 		
-		if (! $this->option('views')) {
+		if (! $this->option('assets')) {
+			$this->createViewsDirectories();
+			$this->exportViews();
+			
+			$this->createTranslationsDirectories();
+			$this->exportTranslations();
+		}
+		
+		if (! $this->option('views') && ! $this->option('assets')) {
             file_put_contents(
                 app_path('Http/Controllers/HomeController.php'),
                 $this->compileControllerStub()
@@ -91,33 +95,12 @@ class BootstrapInstall extends Command {
 	}
 	
 	/**
-     * Create the directories for the files.
+     * Create the directories for the assets.
      *
      * @return void
      */
-    protected function createDirectories()
+    protected function createAssetsDirectories()
     {
-    	/*
-		 * View directories
-		 */ 
-        if (! is_dir($directory = resource_path('views/layouts'))) {
-            mkdir($directory, 0755, true);
-        }
-
-        if (! is_dir($directory = resource_path('views/pages'))) {
-            mkdir($directory, 0755, true);
-        }
-		
-		/*
-		 * Translations directories
-		 */ 
-        if (! is_dir($directory = resource_path('lang/fr'))) {
-            mkdir($directory, 0755, true);
-        }
-		
-		/*
-		 * Assets directories
-		 */
 		if (! is_dir($directory = public_path('assets'))) {
             mkdir($directory, 0755, true);
         }
@@ -127,6 +110,34 @@ class BootstrapInstall extends Command {
         }
 		
 		if (! is_dir($directory = public_path('assets/libs'))) {
+            mkdir($directory, 0755, true);
+        }
+    }
+
+	/**
+     * Create the directories for the views.
+     *
+     * @return void
+     */
+    protected function createViewsDirectories()
+    {
+    	if (! is_dir($directory = resource_path('views/layouts'))) {
+            mkdir($directory, 0755, true);
+        }
+
+        if (! is_dir($directory = resource_path('views/pages'))) {
+            mkdir($directory, 0755, true);
+        }
+    }
+	
+	/**
+     * Create the directories for the translations.
+     *
+     * @return void
+     */
+    protected function createTranslationsDirectories()
+    {
+    	if (! is_dir($directory = resource_path('lang/fr'))) {
             mkdir($directory, 0755, true);
         }
     }
